@@ -12,7 +12,7 @@ public class GameOfLife : MonoBehaviour
 
     private CellStatus[,] _cellStatusArray;
     private Cell[,] _cellArray;
-    //private GamePhaseEnum _gamePhase = GamePhaseEnum.SETUP;
+    private GamePhaseEnum _gamePhase = GamePhaseEnum.SETUP;
 
     void LoadCellStatus() 
     {
@@ -141,6 +141,21 @@ public class GameOfLife : MonoBehaviour
 
     void Update()
     {
-        
+        if(this._gamePhase == GamePhaseEnum.SETUP)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                Ray selectionRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit selection;
+                if(Physics.Raycast(selectionRay, out selection))
+                {
+                    Cell selectedCell = selection.transform.gameObject.GetComponent<Cell>();
+                    if(!selectedCell.IsFixed())
+                    {
+                        selectedCell.ToggleStatus();
+                    }
+                }
+            }
+        }
     }
 }
